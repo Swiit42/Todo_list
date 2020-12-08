@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -8,17 +9,47 @@ import { AlertController } from '@ionic/angular';
 })
 export class HomePage {
 
-  constructor(public alertController: AlertController) {}
+  constructor(public alertController: AlertController, public toastController: ToastController) { }
+  tasks = [];
 
-  async addTask() {
+  async taskAdded() { 
+    const toast = await this.toastController.create({
+      message: 'Votre tâche a été ajouté',
+      duration: 1000
+    });
+    toast.present();
+  }
+  async newTask() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Add a new task',
-      message: 'Add a task',
-      buttons: ['Add'],
-      inputs: [''] 
+      buttons: [{
+        text: 'Add',
+        handler: data => {
+          data.completed = 0;
+          this.tasks.push(data);
+          this.taskAdded();
+        }
+      }],
+      inputs: [{
+        name: 'taskName',
+        type: 'text',
+        placeholder: 'Ajoutez votre tâche'
+      }]
     });
 
     await alert.present();
+  }
+  async deleteTask(task) {
+    const alert = await this.alertController.create({
+      header: 'Supprimer la tâche',
+      buttons: [{
+        text: 'Oui',
+        handler: () => true
+      },
+      {
+        text: 'Non',
+      }]
+    });
   }
 }
