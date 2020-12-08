@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,17 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  constructor(public alertController: AlertController) {}
 
+  async addTask() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Add a new task',
+      message: 'Add a task',
+      buttons: ['Add'],
+      inputs: [''] 
+    });
+
+    await alert.present();
+  }
 }
